@@ -2,7 +2,6 @@ import yaml
 import random
 import requests
 import pandas as pd
-import warnings
 from typing import List, Dict
 
 from datetime import datetime, timedelta

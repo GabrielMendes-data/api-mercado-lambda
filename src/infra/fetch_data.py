@@ -8,7 +8,6 @@ import json
 from datetime import datetime
 from urllib.parse import urlencode
 from dotenv import load_dotenv
-import os
 
 
 # ============== Configuração de Log ==============
