@@ -5,16 +5,22 @@ import pandas as pd
 from typing import List, Dict
 
 from datetime import datetime, timedelta
-from src.infra.fetch_data import SelicFetchData, FocusFetchData, MoedasFetchData, IbgeFetchData, TesouroFetchData
+from src.infra.fetch_data import (
+    SelicFetchData,
+    FocusFetchData,
+    MoedasFetchData,
+    IbgeFetchData,
+    TesouroFetchData,
+)
 
 # ============== Carregar arquivo de endpoints ==============
-with open('api_endpoints.yaml', 'r') as file:
+with open("api_endpoints.yaml", "r") as file:
     file_yaml = yaml.safe_load(file)
 
 
 class DataAleatoria:
 
-    FERIADOS_URL = file_yaml['endpoints']['feriados']['url']
+    FERIADOS_URL = file_yaml["endpoints"]["feriados"]["url"]
 
     def __init__(self, ano: int):
         self.ano = ano
@@ -60,10 +66,13 @@ class DataAleatoria:
 def gerar_indicador_aleatorio():
     return random.choice(["Selic", "IPCA", "Câmbio"])
 
+
 def gerar_serie_temporal_aleatoria():
     return random.choice(["anual", "mensal"])
 
+
 # ========== Testes Funcionais ==========
+
 
 def test_selic_build_url_and_fetch_data():
     selic = SelicFetchData()
@@ -75,15 +84,19 @@ def test_selic_build_url_and_fetch_data():
     r = requests.get(url, timeout=30)
     assert r.status_code == 200
 
+
 def test_focus_build_url_and_fetch_data():
     focus = FocusFetchData()
     data = DataAleatoria(datetime.now().year).gerar_data_aleatoria()
     print(f"Data: {data}")
-    url = focus.build_url(gerar_indicador_aleatorio(), data, gerar_serie_temporal_aleatoria())
+    url = focus.build_url(
+        gerar_indicador_aleatorio(), data, gerar_serie_temporal_aleatoria()
+    )
     print(f"URL: {url}")
 
     r = requests.get(url, timeout=30)
     assert r.status_code == 200
+
 
 def test_moedas_build_url_and_fetch_data():
     moedas = MoedasFetchData()
@@ -95,6 +108,7 @@ def test_moedas_build_url_and_fetch_data():
     r = requests.get(url, timeout=30)
     assert r.status_code == 200
 
+
 def test_ibge_build_url_and_fetch_data():
     ibge = IbgeFetchData()
     data = DataAleatoria(datetime.now().year).gerar_data_aleatoria()
@@ -104,6 +118,7 @@ def test_ibge_build_url_and_fetch_data():
 
     r = requests.get(url, timeout=30)
     assert r.status_code == 200
+
 
 def test_tesouro_build_url_and_fetch_data():
     tesouro = TesouroFetchData()
@@ -115,4 +130,5 @@ def test_tesouro_build_url_and_fetch_data():
     r = requests.get(url, timeout=30)
     assert r.status_code == 200
 
-#NOTE: solucionar warnings devido API de feriados
+
+# NOTE: solucionar warnings devido API de feriados
