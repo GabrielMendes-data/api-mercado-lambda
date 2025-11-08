@@ -36,51 +36,49 @@ class IFetchData(ABC):
 
 # ============== API Selic ==============
 class SelicFetchData(IFetchData):
-        def __init__(self):
-            super().__init__(file_yaml['endpoints']['bcb']['selic']['url'])
+    def __init__(self):
+        super().__init__(file_yaml['endpoints']['bcb']['selic']['url'])
 
-        def parse_date(self, date_str: str) -> datetime:
-            """
-            Tenta interpretar a data em diferentes formatos possíveis.
-            Suporta os formatos: dd/mm/yyyy e yyyy-mm-dd.
-            """
-            for date_format in ("%d/%m/%Y", "%Y-%m-%d"):
-                try:
-                    return datetime.strptime(date_str, date_format)
-                except ValueError:
-                    pass
-            raise ValueError(f"Formato de data inválido: {date_str}") 
-
-        def build_url(self, date: str) -> str:
-            """
-            Constroi a URL com os parâmetros necessários.
-            """
-            parsed_date = self.parse_date(date).strftime("%d/%m/%Y")
-            params = {
-                'formato': 'json',
-                'dataInicial': parsed_date,
-                'dataFinal': parsed_date,
-            }
-
-            return f"{self.endpoint}?{urlencode(params)}"
-
-        def fetch_data(self, date: str) -> dict:
-            """"
-            Busca os dados da API Selic.
-            """
+    def parse_date(self, date_str: str) -> datetime:
+        """
+        Tenta interpretar a data em diferentes formatos possíveis.
+        Suporta os formatos: dd/mm/yyyy e yyyy-mm-dd.
+        """
+        for date_format in ("%d/%m/%Y", "%Y-%m-%d"):
             try:
-                url = self.build_url(date)
-                logging.debug(f"URL Selic: {url}")
+                return datetime.strptime(date_str, date_format)
+            except ValueError:
+                pass
+        raise ValueError(f"Formato de data inválido: {date_str}") 
 
-                # Faz a requisição HTTP
-                r = requests.get(url, timeout=30)
-                r.raise_for_status()
+    def build_url(self, date: str) -> str:
+        """
+        Constroi a URL com os parâmetros necessários.
+        """
+        parsed_date = self.parse_date(date).strftime("%d/%m/%Y")
+        params = {
+            'formato': 'json',
+            'dataInicial': parsed_date,
+            'dataFinal': parsed_date,
+        }
 
-                return r.json()
+        return f"{self.endpoint}?{urlencode(params)}"
 
-            except Exception as e:
-                logging.error(f"Erro ao buscar dados: {e}")
-                return None
+    def fetch_data(self, date: str) -> dict:
+        """"
+        Busca os dados da API Selic.
+        """
+        try:
+            url = self.build_url(date)
+            logging.debug(f"URL Selic: {url}")
+            # Faz a requisição HTTP
+            r = requests.get(url, timeout=30)
+            r.raise_for_status()
+            return r.json()
+        
+        except Exception as e:
+            logging.error(f"Erro ao buscar dados: {e}")
+            return None
 
 
 # ============== API Expectativa Mercado ==============
