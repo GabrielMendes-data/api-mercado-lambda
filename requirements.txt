@@ -1,6 +1,6 @@
---extra-index-url https://nexus.sharedservices.local/repository/python-releases/simple
---extra-index-url https://nexus.sharedservices.local/repository/python/simple/
---trusted-host nexus.sharedservices.local
+# --extra-index-url https://nexus.sharedservices.local/repository/python-releases/simple
+# --extra-index-url https://nexus.sharedservices.local/repository/python/simple/
+# --trusted-host nexus.sharedservices.local
 
 pandas==2.3.3
 requests==2.32.5

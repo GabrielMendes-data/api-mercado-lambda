@@ -340,7 +340,7 @@ if __name__ == "__main__":
 
     print("--------------------------------")
     ibge = IbgeFetchData()
-    data = ibge.build_url(date="30/09/2025")
+    data = ibge.fetch_data(date="30/09/2025")
     print(data)
 
     print("--------------------------------")
