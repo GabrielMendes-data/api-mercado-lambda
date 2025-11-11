@@ -13,7 +13,7 @@ class ColDtReferencia:
     @staticmethod
     def add_dt_referencia(data: list[dict], date: str) -> list[dict]:
         for item in data:
-            item['dt_execucao'] = datetime.strptime(date, "%d/%m/%Y").date()
+            item['dt_execucao'] = datetime.strptime(date, "%d/%m/%Y").strftime("%Y-%m-%d")
         return data
 
 class TransformFocusData:
@@ -23,7 +23,7 @@ class TransformFocusData:
         # Adicionar proximo ano na data
         dt_date = datetime.strptime(date,"%d/%m/%Y").date()
         self.date = [date,dt_date.replace(year = dt_date.year + 1).strftime("%d/%m/%Y")]
-        
+
         self.temporal_series = temporal_series
 
     def transform(self) -> list[dict]:
@@ -36,7 +36,7 @@ class TransformFocusData:
             for date in self.date:
 
                 fetch_data = FocusFetchData().fetch_data(indicator, date, self.temporal_series)
-                
+
                 dict_filtered = fetch_data[-1]
 
                 keys = ['Indicador','Data','DataReferencia','Mediana']
@@ -61,9 +61,9 @@ class TransformIbgeData:
         fetch_data = IbgeFetchData().fetch_data(self.date)
 
         # Arrays de mapeamento para substituir os nomes das keys
-        keys = ['V', 'D2C', 'D3C', 'D3N']  
+        keys = ['V', 'D2C', 'D3C', 'D3N']
         new_keys = ['valor_ipca', 'ano_mes', 'variavel_codigo', 'variavel_nome']
-        
+
         # Converter nomes das keys
         if isinstance(fetch_data, list):
             # Itera pela lista e transforma cada item (dicionário)
@@ -73,7 +73,7 @@ class TransformIbgeData:
             ]
         else:
             raise TypeError("fetch_data precisa ser uma lista!")
-        
+
         variaveis = ['63','2265']
         result_ibge = [
             {key: item[key] for key in new_keys}
@@ -135,7 +135,7 @@ class FactoryAPIs:
         elif api_name == 'dolar':
             return TransformDolarData(params['date']).transform()
         elif api_name == 'ibge':
-            return TransformIbgeData(params['date']).transform()            
+            return TransformIbgeData(params['date']).transform()
         elif api_name == 'tesouro':
             return TransformTesouroData(params['date']).transform()
         else:
