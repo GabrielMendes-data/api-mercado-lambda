@@ -256,6 +256,7 @@ class IbgeFetchData(IFetchData):
         """
         try:
             url = self.build_url(date)
+            print(url)
             logging.debug(f"URL IBGE: {url}")
 
             # Faz a requisição HTTP
