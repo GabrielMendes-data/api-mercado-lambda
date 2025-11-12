@@ -71,5 +71,5 @@ jobs:
         run: |
           aws lambda update-function-code \
             --function-name api-mercado-lambda \
-            -- image-uri ${{ secrets.ECR_URI }}:latest \
-            -- region ${{ secrets.AWS_REGION }}
+            --image-uri ${{ secrets.ECR_URI }}:latest \
+            --region ${{ secrets.AWS_REGION }}
